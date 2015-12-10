@@ -40,6 +40,9 @@ class Object extends AbstractResource implements Creatable, Deletable, HasMetada
     /** @var array */
     public $metadata;
 
+    /** @var StreamInterface */
+    public $stream;
+
     protected $markerKey = 'name';
     protected $aliases = ['bytes' => 'contentLength'];
 
@@ -48,8 +51,7 @@ class Object extends AbstractResource implements Creatable, Deletable, HasMetada
      */
     public function populateFromResponse(ResponseInterface $response)
     {
-        parent::populateFromResponse($response);
-
+        $this->stream = $response->getBody();
         $this->hash = $response->getHeaderLine('ETag');
         $this->contentLength = $response->getHeaderLine('Content-Length');
         $this->lastModified = $response->getHeaderLine('Last-Modified');
@@ -139,9 +141,9 @@ class Object extends AbstractResource implements Creatable, Deletable, HasMetada
     public function resetMetadata(array $metadata)
     {
         $options = [
-            'containerName'  => $this->containerName,
-            'name'           => $this->name,
-            'metadata'       => $metadata,
+            'containerName' => $this->containerName,
+            'name'          => $this->name,
+            'metadata'      => $metadata,
         ];
 
         $response = $this->execute($this->api->postObject(), $options);

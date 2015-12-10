@@ -377,7 +377,7 @@ TYPEOTHER
 
     public $content = [
         'location'    => self::RAW,
-        'type'        => self::STRING_TYPE,
+        'type'        => 'GuzzleHttp\Psr7\Stream',
         'description' => 'The content of the object in string form',
     ];
 
